@@ -12,7 +12,6 @@ public class StartState : SceneBaseState {
         SceneName = "StartScene";
         base.OnEnter(callback);
 
-        LoadLevelAsync(SceneName);
         StartInit();
     }
 
