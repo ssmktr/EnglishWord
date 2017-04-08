@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum ePanelType
+public enum ePanelState
 {
     Default,
     Ignore,
@@ -12,6 +12,9 @@ public class UIBasePanel : MonoBehaviour {
 
     // UI 오픈할때 파라미터 저장
     public object[] parameters;
+
+    // 패널 상태
+    public ePanelState _ePanelType = ePanelState.Default;
 
     public virtual void Init()
     {

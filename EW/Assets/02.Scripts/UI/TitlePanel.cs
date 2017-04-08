@@ -49,6 +49,7 @@ public class TitlePanel : UIBasePanel {
 
                 // 게임 시작
                 Close();
+                UIMgr.Instance.Open("UpBarPanel");
                 UIMgr.Instance.Open("MainPanel");
             }
             else
