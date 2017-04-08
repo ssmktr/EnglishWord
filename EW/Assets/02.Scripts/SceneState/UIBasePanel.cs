@@ -2,6 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum ePanelType
+{
+    Default,
+    Ignore,
+}
+
 public class UIBasePanel : MonoBehaviour {
 
     // UI 오픈할때 파라미터 저장
@@ -14,6 +20,11 @@ public class UIBasePanel : MonoBehaviour {
     public virtual void LateInit()
     {
         gameObject.SetActive(true);
+    }
+
+    public virtual void Hide()
+    {
+        gameObject.SetActive(false);
     }
 
     public virtual void Close()

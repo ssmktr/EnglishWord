@@ -75,6 +75,7 @@ public class UIMgr : Singleton<UIMgr> {
         {
             if (ListUIPanel[i].name == name)
             {
+                _CurUIBasePanel = ListUIPanel[i + 1];
                 ListUIPanel.RemoveAt(i);
                 break;
             }
