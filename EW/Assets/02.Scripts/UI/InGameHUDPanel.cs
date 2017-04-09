@@ -173,7 +173,7 @@ public class InGameHUDPanel : UIBasePanel {
 
         IsEndding = false;
         UIMgr.Instance.SetUICamera(true);
-        string msg = string.Format("{0}\n\n정답 입니다", GameMgr.Instance.SingGameWordData.korean);
+        string msg = string.Format("{0}\n{1}\n\n정답 입니다", GameMgr.Instance.SingGameWordData.english, GameMgr.Instance.SingGameWordData.korean);
         UIMgr.Instance.OpenPopup("결과", msg, delegate ()
         {
             if (!IsEndding)
