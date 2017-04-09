@@ -242,6 +242,7 @@ public class UIMgr : Singleton<UIMgr> {
             _UICamera.enabled = on;
     }
 
+    // Popup
     public static PopupPanel Popup = null;
     public void OpenPopup(string title, string message, System.Action okCallback, System.Action cancelCallback = null, string okLbl = "", string cancelLbl = "")
     {
@@ -258,5 +259,23 @@ public class UIMgr : Singleton<UIMgr> {
                 popup.OpenPopup(title, message, okCallback, cancelCallback, okLbl, cancelLbl);
             }
         }
+    }
+
+    // Loading
+    public static LoadingPanel LoadingPanel = null;
+    public void OpenLoadingPanel(bool on)
+    {
+        UIBasePanel panel = Open("LoadingPanel");
+        if (panel != null)
+        {
+            LoadingPanel loading = panel.GetComponent<LoadingPanel>();
+            if (loading != null)
+            {
+                LoadingPanel = loading;
+            }
+        }
+
+        if (on == false && LoadingPanel != null)
+            LoadingPanel.Close();
     }
 }
