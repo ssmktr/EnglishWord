@@ -12,6 +12,11 @@ public class DataMgr : Singleton<DataMgr> {
     {
         return ListWordData.Find(data => data.id == id);
     }
+
+    public WordData GetClearWordData(int id)
+    {
+        return ListClearWordData.Find(data => data.id == id);
+    }
     #endregion
 
     #region LOCAL
