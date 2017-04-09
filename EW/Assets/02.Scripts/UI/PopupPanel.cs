@@ -53,7 +53,7 @@ public class PopupPanel : UIBasePanel {
         if (_CancelCallBack != null)
         {
             CancelBtn.SetActive(true);
-            OkBtn.transform.localPosition = new Vector3(-150, -120, 0);
+            OkBtn.transform.localPosition = new Vector3(150, -120, 0);
         }
         else
         {
