@@ -66,7 +66,7 @@ public class UpBarPanel : UIBasePanel {
         if (GameMgr.Instance.EnterCost > 0)
             EnterCostNameLbl.text = GameMgr.Instance.EnterCost.ToString("N0");
         else
-            EnterCostNameLbl.text = "충전하기";
+            EnterCostNameLbl.text = DataMgr.Instance.GetLocal(1002);
     }
 
     void OnClickEnterCostBtn(GameObject sender)

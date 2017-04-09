@@ -10,6 +10,8 @@ public class MainPanel : UIBasePanel {
     {
         base.Init();
 
+        ReadyBtn.transform.FindChild("name").GetComponent<UILabel>().text = DataMgr.Instance.GetLocal(1001);
+
         UIEventListener.Get(ReadyBtn).onClick = OnClickReadyBtn;
     }
 
@@ -17,7 +19,7 @@ public class MainPanel : UIBasePanel {
     {
         base.LateInit();
 
-        GameMgr.Instance.OnEvent("SetTitle", "메인");
+        GameMgr.Instance.OnEvent("SetTitle", DataMgr.Instance.GetLocal(1000));
 
     }
 

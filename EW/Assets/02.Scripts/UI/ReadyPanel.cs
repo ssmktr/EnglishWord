@@ -10,6 +10,8 @@ public class ReadyPanel : UIBasePanel {
     {
         base.Init();
 
+        StartBtn.transform.FindChild("name").GetComponent<UILabel>().text = DataMgr.Instance.GetLocal(2001);
+
         // 게임 시작
         UIEventListener.Get(StartBtn).onClick = OnClickStartBtn;
     }
@@ -18,7 +20,7 @@ public class ReadyPanel : UIBasePanel {
     {
         base.LateInit();
 
-        GameMgr.Instance.OnEvent("SetTitle", "준비하기");
+        GameMgr.Instance.OnEvent("SetTitle", DataMgr.Instance.GetLocal(2000));
     }
 
     // 랜덤하게 문제 선택
@@ -32,7 +34,7 @@ public class ReadyPanel : UIBasePanel {
         // 모든 문제를 풀었는지 체크
         if (DataMgr.Instance.ListClearWordData.Count >= DataMgr.Instance.ListWordData.Count)
         {
-            UIMgr.Instance.OnPopupToastPanel("모든 문제를 풀었습니다");
+            UIMgr.Instance.OnPopupToastPanel(DataMgr.Instance.GetLocal(2002));
             yield break;
         }
 
@@ -69,7 +71,7 @@ public class ReadyPanel : UIBasePanel {
             SceneManagerCustom.Instance.ActionEvent(_ACTION.GO_GAME);
         }
         else
-            UIMgr.Instance.OnPopupToastPanel("문제를 선택 하지 못했습니다");
+            UIMgr.Instance.OnPopupToastPanel(DataMgr.Instance.GetLocal(2003));
 
         UIMgr.Instance.SetUICamera(true);
     }

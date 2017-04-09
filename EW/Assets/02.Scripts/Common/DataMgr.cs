@@ -9,11 +9,11 @@ public class DataMgr : Singleton<DataMgr> {
 
     #region LOCAL
     public Dictionary<int, LocalData> DicLocal = new Dictionary<int, LocalData>();
-    public string GetLocal(int id, LocalType localType = LocalType.Ko)
+    public string GetLocal(int id)
     {
         if (DicLocal.ContainsKey(id))
         {
-            switch (localType)
+            switch (GameDefine.localType)
             {
                 case LocalType.Ko:
                     return DicLocal[id].ko;

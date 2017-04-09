@@ -46,6 +46,7 @@ public class TitlePanel : UIBasePanel {
         yield return StartCoroutine(_LoadWordData());
         yield return StartCoroutine(_LoadLocalData());
 
+        EnterBtn.transform.FindChild("name").GetComponent<UILabel>().text = DataMgr.Instance.GetLocal(1);
         IsLoadingComplete = true;
         EnterBtn.SetActive(IsLoadingComplete);
     }

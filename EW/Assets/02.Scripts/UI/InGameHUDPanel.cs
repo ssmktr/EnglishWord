@@ -10,6 +10,8 @@ public class InGameHUDPanel : UIBasePanel {
     {
         base.Init();
 
+        ExitBtn.transform.FindChild("name").GetComponent<UILabel>().text = DataMgr.Instance.GetLocal(2);
+
         // 나가기 버튼
         UIEventListener.Get(ExitBtn).onClick = OnClickExitBtn;
     }
