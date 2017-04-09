@@ -5,6 +5,7 @@ using UnityEngine;
 public class TitlePanel : UIBasePanel {
 
     public GameObject EnterBtn;
+    bool IsLoadingComplete = false;
 
     public override void Init()
     {
@@ -12,7 +13,14 @@ public class TitlePanel : UIBasePanel {
 
         UIEventListener.Get(EnterBtn).onClick = (sender) =>
         {
-            LoadJsonData();
+            // 로딩 완료 체크
+            if (IsLoadingComplete)
+            {
+                // 게임 시작
+                Close();
+                UIMgr.Instance.Open("UpBarPanel");
+                UIMgr.Instance.Open("MainPanel");
+            }
         };
     }
 
@@ -22,6 +30,10 @@ public class TitlePanel : UIBasePanel {
 
         // 게임 실행 했음
         GameMgr.Instance.IsStartApp = true;
+        IsLoadingComplete = false;
+        EnterBtn.SetActive(IsLoadingComplete);
+
+        LoadJsonData();
     }
 
     void LoadJsonData()
@@ -31,12 +43,23 @@ public class TitlePanel : UIBasePanel {
 
     IEnumerator _LoadJsonData()
     {
+        yield return StartCoroutine(_LoadWordData());
+        yield return StartCoroutine(_LoadLocalData());
+
+        IsLoadingComplete = true;
+        EnterBtn.SetActive(IsLoadingComplete);
+    }
+
+    // 단어 데이터 파싱
+    IEnumerator _LoadWordData()
+    {
         WWW www = new WWW(NetworkMgr.Instance.URL("Jsons/worddata.json"));
         GameHelper.DevDebugLog(www.url);
 
-        if (!www.isDone)
+        while (!www.isDone)
         {
             Debug.Log(www.progress);
+            yield return null;
         }
 
         yield return www;
@@ -48,11 +71,36 @@ public class TitlePanel : UIBasePanel {
                 DataMgr.Instance.ListWordData.Clear();
                 TinyJSON.Variant variant = TinyJSON.JSON.Load(www.text);
                 TinyJSON.JSON.MakeInto<List<WordData>>(variant, out DataMgr.Instance.ListWordData);
+            }
+            else
+                GameHelper.DevDebugLog(www.error, LOGSTATE.ERROR);
+        }
+    }
 
-                // 게임 시작
-                Close();
-                UIMgr.Instance.Open("UpBarPanel");
-                UIMgr.Instance.Open("MainPanel");
+    // 로케일 파싱
+    IEnumerator _LoadLocalData()
+    {
+        WWW www = new WWW(NetworkMgr.Instance.URL("Jsons/localdata.json"));
+        GameHelper.DevDebugLog(www.url);
+
+        while (!www.isDone)
+        {
+            Debug.Log(www.progress);
+            yield return null;
+        }
+
+        yield return www;
+
+        if (www.isDone)
+        {
+            if (www.error == null)
+            {
+                DataMgr.Instance.DicLocal.Clear();
+                TinyJSON.Variant variant = TinyJSON.JSON.Load(www.text);
+                List<LocalData> list = new List<LocalData>();
+                TinyJSON.JSON.MakeInto<List<LocalData>>(variant, out list);
+                for (int i = 0; i < list.Count; ++i)
+                    DataMgr.Instance.DicLocal.Add(list[i].id, list[i]);
             }
             else
                 GameHelper.DevDebugLog(www.error, LOGSTATE.ERROR);

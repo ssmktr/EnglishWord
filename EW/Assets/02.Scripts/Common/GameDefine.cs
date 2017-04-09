@@ -24,3 +24,9 @@ public enum PrevType
     OnlyClose,
     Close,
 }
+
+public enum LocalType
+{
+    Ko,
+    En,
+}

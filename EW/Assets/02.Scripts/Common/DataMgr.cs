@@ -6,4 +6,24 @@ public class DataMgr : Singleton<DataMgr> {
 
     public List<WordData> ListWordData = new List<WordData>();
     public List<WordData> ListClearWordData = new List<WordData>();
+
+    #region LOCAL
+    public Dictionary<int, LocalData> DicLocal = new Dictionary<int, LocalData>();
+    public string GetLocal(int id, LocalType localType = LocalType.Ko)
+    {
+        if (DicLocal.ContainsKey(id))
+        {
+            switch (localType)
+            {
+                case LocalType.Ko:
+                    return DicLocal[id].ko;
+
+                case LocalType.En:
+                    return DicLocal[id].en;
+            }
+        }
+
+        return string.Format("{0} 인덱스 데이터가 없습니다", id);
+    }
+    #endregion
 }

@@ -18,3 +18,9 @@ public class WordData
         Korean = data.Korean;
     }
 }
+public class LocalData
+{
+    public int id = 0;
+    public string ko = "";
+    public string en = "";
+}
