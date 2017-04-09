@@ -73,19 +73,25 @@ public class UIMgr : Singleton<UIMgr> {
                 panel.Init();
             }
 
-            if (panel != null)
+            if (panel._ePanelType != ePanelState.None)
             {
-                if (panel._ePanelType == ePanelState.Default)
-                    ListUIPanel.Insert(0, panel);
-                else
-                    ListUIPanel.Add(panel);
+                if (panel != null)
+                {
+                    if (panel._ePanelType == ePanelState.Default)
+                        ListUIPanel.Insert(0, panel);
+                    else
+                        ListUIPanel.Add(panel);
+                }
             }
         }
         else
         {
             // 리스트에서 가장 앞으로 옮긴다
-            ListUIPanel.Remove(panel);
-            ListUIPanel.Insert(0, panel);
+            if (panel._ePanelType != ePanelState.None)
+            {
+                ListUIPanel.Remove(panel);
+                ListUIPanel.Insert(0, panel);
+            }
         }
         // 파라미터 저장
         panel.parameters = _parameters;
@@ -132,7 +138,8 @@ public class UIMgr : Singleton<UIMgr> {
             {
                 UIBasePanel panel = ListUIPanel[i];
                 ListUIPanel.Remove(panel);
-                ListUIPanel.Add(panel);
+                if (panel._ePanelType != ePanelState.None)
+                    ListUIPanel.Add(panel);
                 break;
             }
         }
@@ -140,23 +147,31 @@ public class UIMgr : Singleton<UIMgr> {
 
     public void Prev()
     {
-        if (ListUIPanel.Count < 2)
-        {
-            OnPopupToastPanel("숨겨진 패널이 없습니다");
-            return;
-        }
+        //if (ListUIPanel.Count < 2)
+        //{
+        //    OnPopupToastPanel("숨겨진 패널이 없습니다");
+        //    return;
+        //}
+
+        UIBasePanel hidePanel = null;
+        UIBasePanel showPanel = null;
 
         int hideIdx = ListUIPanel.FindIndex(panel => panel._ePanelType != ePanelState.Ignore && _CurUIBasePanel.name == panel.name);
-        int showIdx = ListUIPanel.FindIndex(hideIdx + 1, panel => panel._ePanelType != ePanelState.Ignore);
-
-        UIBasePanel hidePanel = ListUIPanel[hideIdx];
+        if (hideIdx >= 0 && ListUIPanel.Count > hideIdx)
+            hidePanel = ListUIPanel[hideIdx];
         if (hidePanel is MainPanel || hidePanel is TitlePanel)
         {
-            OnPopupToastPanel("더 이상 뒤로 갈수 없습니다");
+            OpenPopup(DataMgr.Instance.GetLocal(5), DataMgr.Instance.GetLocal(6), delegate () 
+            {
+                Application.Quit();
+
+            }, delegate() { }, DataMgr.Instance.GetLocal(3), DataMgr.Instance.GetLocal(4));
             return;
         }
 
-        UIBasePanel showPanel = ListUIPanel[showIdx];
+        int showIdx = ListUIPanel.FindIndex(hideIdx + 1, panel => panel._ePanelType != ePanelState.Ignore);
+        if (showIdx >= 0 && ListUIPanel.Count > showIdx)
+            showPanel = ListUIPanel[showIdx];
 
         if (hidePanel != null)
         {
@@ -168,8 +183,6 @@ public class UIMgr : Singleton<UIMgr> {
                 case PrevType.OnlyHide:
                     {
                         hidePanel.Hide();
-                        ListUIPanel.RemoveAt(hideIdx);
-                        ListUIPanel.Add(hidePanel);
                     }
                     break;
 
@@ -227,5 +240,23 @@ public class UIMgr : Singleton<UIMgr> {
     {
         if (_UICamera != null)
             _UICamera.enabled = on;
+    }
+
+    public static PopupPanel Popup = null;
+    public void OpenPopup(string title, string message, System.Action okCallback, System.Action cancelCallback = null, string okLbl = "", string cancelLbl = "")
+    {
+        if (Popup != null)
+            return;
+
+        UIBasePanel panel = Open("PopupPanel");
+        if (panel != null)
+        {
+            PopupPanel popup = panel.GetComponent<PopupPanel>();
+            if (popup != null)
+            {
+                Popup = popup;
+                popup.OpenPopup(title, message, okCallback, cancelCallback, okLbl, cancelLbl);
+            }
+        }
     }
 }
