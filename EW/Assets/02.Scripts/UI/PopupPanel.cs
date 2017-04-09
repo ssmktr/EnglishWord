@@ -37,6 +37,7 @@ public class PopupPanel : UIBasePanel {
             OkLbl.text = okLbl;
         else
             OkLbl.text = DataMgr.Instance.GetLocal(3);
+
         if (string.IsNullOrEmpty(cancelLbl))
             CancelLbl.text = cancelLbl;
         else
