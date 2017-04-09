@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class GameMgr : Singleton<GameMgr> {
 
+    public bool IsStartApp = false;
+
     public string NickName = "";
     public int EnterCost = 0;
 

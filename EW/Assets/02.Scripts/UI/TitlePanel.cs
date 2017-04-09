@@ -20,6 +20,8 @@ public class TitlePanel : UIBasePanel {
     {
         base.LateInit();
 
+        // 게임 실행 했음
+        GameMgr.Instance.IsStartApp = true;
     }
 
     void LoadJsonData()

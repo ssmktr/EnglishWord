@@ -63,7 +63,11 @@ public class ReadyPanel : UIBasePanel {
         // 인게임에 사용할 데이터 저장
         GameMgr.Instance.SingGameWordData = wordData;
         if (GameMgr.Instance.SingGameWordData != null)
+        {
+            UIMgr.Instance.ShotDownUI();
+
             SceneManagerCustom.Instance.ActionEvent(_ACTION.GO_GAME);
+        }
         else
             UIMgr.Instance.OnPopupToastPanel("문제를 선택 하지 못했습니다");
 

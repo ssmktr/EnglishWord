@@ -14,7 +14,17 @@ public class UIMgr : Singleton<UIMgr> {
     private void Awake()
     {
         ListUIPanel.Clear();
+        UIRootInit();
+    }
 
+    private void Update()
+    {
+        if (Input.GetKeyUp(KeyCode.Escape))
+            Prev();
+    }
+
+    void UIRootInit()
+    {
         GameObject UIRoot = GameObject.Find("UIRoot");
         if (UIRoot == null)
         {
@@ -43,15 +53,11 @@ public class UIMgr : Singleton<UIMgr> {
         }
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyUp(KeyCode.Escape))
-            Prev();
-    }
-
     // 패널을 연다
     public UIBasePanel Open(string path, params object[] _parameters)
     {
+        UIRootInit();
+
         UIBasePanel panel = GetPanel(path);
         if (panel == null)
         {
@@ -144,13 +150,13 @@ public class UIMgr : Singleton<UIMgr> {
         int showIdx = ListUIPanel.FindIndex(hideIdx + 1, panel => panel._ePanelType != ePanelState.Ignore);
 
         UIBasePanel hidePanel = ListUIPanel[hideIdx];
-        UIBasePanel showPanel = ListUIPanel[showIdx];
-
-        if (hidePanel is MainPanel)
+        if (hidePanel is MainPanel || hidePanel is TitlePanel)
         {
             OnPopupToastPanel("더 이상 뒤로 갈수 없습니다");
             return;
         }
+
+        UIBasePanel showPanel = ListUIPanel[showIdx];
 
         if (hidePanel != null)
         {
