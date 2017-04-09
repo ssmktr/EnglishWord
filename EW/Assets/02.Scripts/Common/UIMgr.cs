@@ -159,6 +159,11 @@ public class UIMgr : Singleton<UIMgr> {
         int hideIdx = ListUIPanel.FindIndex(panel => panel._ePanelType != ePanelState.Ignore && _CurUIBasePanel.name == panel.name);
         if (hideIdx >= 0 && ListUIPanel.Count > hideIdx)
             hidePanel = ListUIPanel[hideIdx];
+
+        // 뒤로 가기 막기
+        if (hidePanel is InGameHUDPanel)
+            return;
+
         if (hidePanel is MainPanel || hidePanel is TitlePanel)
         {
             OpenPopup(DataMgr.Instance.GetLocal(5), DataMgr.Instance.GetLocal(6), delegate () 
