@@ -5,6 +5,7 @@ using UnityEngine;
 public class TitlePanel : UIBasePanel {
 
     public GameObject EnterBtn;
+    public UIProgressBar ProgressBar;
     bool IsLoadingComplete = false;
 
     public override void Init()
@@ -32,23 +33,26 @@ public class TitlePanel : UIBasePanel {
         GameMgr.Instance.IsStartApp = true;
         IsLoadingComplete = false;
         EnterBtn.SetActive(IsLoadingComplete);
+        ProgressBar.gameObject.SetActive(!IsLoadingComplete);
 
         LoadJsonData();
     }
 
     void LoadJsonData()
     {
+        ProgressBar.value = 0;
         StartCoroutine(_LoadJsonData());
     }
 
     IEnumerator _LoadJsonData()
     {
-        yield return StartCoroutine(_LoadWordData());
         yield return StartCoroutine(_LoadLocalData());
+        yield return StartCoroutine(_LoadWordData());
 
         EnterBtn.transform.FindChild("name").GetComponent<UILabel>().text = DataMgr.Instance.GetLocal(1);
         IsLoadingComplete = true;
         EnterBtn.SetActive(IsLoadingComplete);
+        ProgressBar.gameObject.SetActive(!IsLoadingComplete);
     }
 
     // 단어 데이터 파싱
@@ -59,7 +63,7 @@ public class TitlePanel : UIBasePanel {
 
         while (!www.isDone)
         {
-            Debug.Log(www.progress);
+            ProgressBar.value = www.progress;
             yield return null;
         }
 
@@ -86,7 +90,7 @@ public class TitlePanel : UIBasePanel {
 
         while (!www.isDone)
         {
-            Debug.Log(www.progress);
+            ProgressBar.value = www.progress;
             yield return null;
         }
 

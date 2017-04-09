@@ -265,17 +265,28 @@ public class UIMgr : Singleton<UIMgr> {
     public static LoadingPanel LoadingPanel = null;
     public void OpenLoadingPanel(bool on)
     {
-        UIBasePanel panel = Open("LoadingPanel");
-        if (panel != null)
+        if (LoadingPanel == null)
         {
-            LoadingPanel loading = panel.GetComponent<LoadingPanel>();
-            if (loading != null)
+            UIBasePanel panel = GetPanel("LoadingPanel");
+            if (panel == null)
+                panel = Open("LoadingPanel");
+
+            if (panel != null)
             {
-                LoadingPanel = loading;
+                LoadingPanel loading = panel.GetComponent<LoadingPanel>();
+                if (loading != null)
+                {
+                    LoadingPanel = loading;
+                }
             }
         }
 
-        if (on == false && LoadingPanel != null)
-            LoadingPanel.Close();
+        if (LoadingPanel != null)
+        {
+            if (on == false)
+                LoadingPanel.Close();
+            else
+                LoadingPanel.LateInit();
+        }
     }
 }
