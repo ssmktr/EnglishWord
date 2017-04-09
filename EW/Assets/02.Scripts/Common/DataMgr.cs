@@ -7,6 +7,13 @@ public class DataMgr : Singleton<DataMgr> {
     public List<WordData> ListWordData = new List<WordData>();
     public List<WordData> ListClearWordData = new List<WordData>();
 
+    #region WORDDATA
+    public WordData GetWordData(int id)
+    {
+        return ListWordData.Find(data => data.id == id);
+    }
+    #endregion
+
     #region LOCAL
     public Dictionary<int, LocalData> DicLocal = new Dictionary<int, LocalData>();
     public string GetLocal(int id)
