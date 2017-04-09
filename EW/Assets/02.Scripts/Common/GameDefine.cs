@@ -15,3 +15,12 @@ public enum LOGSTATE
     WARRING,
     ERROR,
 }
+
+public enum PrevType
+{
+    Not,
+    OnlyHide,
+    Hide,
+    OnlyClose,
+    Close,
+}

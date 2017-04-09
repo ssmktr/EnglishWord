@@ -24,6 +24,7 @@ public class UpBarPanel : UIBasePanel {
     {
         if (GameMgr.Instance != null)
         {
+            GameMgr.Instance.AddEvent("SetTitle", SetTitle);
             GameMgr.Instance.AddEvent("SetUpData", SetUpData);
         }
     }
@@ -32,6 +33,7 @@ public class UpBarPanel : UIBasePanel {
     {
         if (GameMgr.Instance != null)
         {
+            GameMgr.Instance.RemoveEvent("SetTitle");
             GameMgr.Instance.RemoveEvent("SetUpData");
         }
     }
@@ -44,9 +46,9 @@ public class UpBarPanel : UIBasePanel {
     }
 
     // 타이틀명 설정
-    public void SetTitle(string title)
+    public void SetTitle(object param)
     {
-        TitleLbl.text = title;
+        TitleLbl.text = (string)param;
 
         BackBtn.SetActive(!(UIMgr.Instance.GetCurBasePanel is MainPanel));
     }

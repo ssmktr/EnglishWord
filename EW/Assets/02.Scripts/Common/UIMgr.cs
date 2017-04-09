@@ -84,9 +84,13 @@ public class UIMgr : Singleton<UIMgr> {
         // 파라미터 저장
         panel.parameters = _parameters;
 
-        panel.LateInit();
         if (panel._ePanelType == ePanelState.Default)
             _CurUIBasePanel = panel;
+        panel.LateInit();
+
+        //for (int i = 0; i < ListUIPanel.Count; ++i)
+        //    Debug.Log(ListUIPanel[i].name);
+        //Debug.Log("CurPanel : " + _CurUIBasePanel.name);
 
         return panel;
     }
@@ -102,7 +106,7 @@ public class UIMgr : Singleton<UIMgr> {
 
     public void CloseEvent(string name)
     {
-        // 해당 패널 리스테에서 빼기
+        // 해당 패널 리스트에서 빼기
         for (int i = 0; i < ListUIPanel.Count; ++i)
         {
             if (ListUIPanel[i].name == name)
@@ -113,49 +117,83 @@ public class UIMgr : Singleton<UIMgr> {
         }
     }
 
+    public void HideEvent(string name)
+    {
+        // 해당 패널 리스트의 맨뒤로 보내기
+        for (int i = 0; i < ListUIPanel.Count; ++i)
+        {
+            if (ListUIPanel[i].name == name)
+            {
+                UIBasePanel panel = ListUIPanel[i];
+                ListUIPanel.Remove(panel);
+                ListUIPanel.Add(panel);
+                break;
+            }
+        }
+    }
+
     public void Prev()
     {
-        // 뒤로 가기 못하는 패널 체크
-        if (_CurUIBasePanel is MainPanel || _CurUIBasePanel is TitlePanel)
+        if (ListUIPanel.Count < 2)
+        {
+            OnPopupToastPanel("숨겨진 패널이 없습니다");
+            return;
+        }
+
+        int hideIdx = ListUIPanel.FindIndex(panel => panel._ePanelType != ePanelState.Ignore && _CurUIBasePanel.name == panel.name);
+        int showIdx = ListUIPanel.FindIndex(hideIdx + 1, panel => panel._ePanelType != ePanelState.Ignore);
+
+        UIBasePanel hidePanel = ListUIPanel[hideIdx];
+        UIBasePanel showPanel = ListUIPanel[showIdx];
+
+        if (hidePanel is MainPanel)
         {
             OnPopupToastPanel("더 이상 뒤로 갈수 없습니다");
             return;
         }
 
-        int curIdx = -1;
-        int prevIdx = -1;
-        for (int i = 0; i < ListUIPanel.Count; ++i)
+        if (hidePanel != null)
         {
-            // 현재 패널에 정해지면 들어옴
-            if (curIdx >= 0)
+            switch (hidePanel.Prev())
             {
-                if (ListUIPanel[i]._ePanelType == ePanelState.Default)
-                {
-                    prevIdx = i;
+                case PrevType.Not:
                     break;
-                }
-            }
-            // 현재 패널 구하기
-            else if (curIdx == -1 && _CurUIBasePanel.name == ListUIPanel[i].name)
-            {
-                curIdx = i;
-            }
-        }
 
-        // 현재와 이전 인덱스가 리스트 크기와 맞는지 체크
-        if (prevIdx >= 0 && curIdx >= 0 && ListUIPanel.Count > curIdx && ListUIPanel.Count > prevIdx)
-        {
-            // 현재 패널 바로 뒤에 있는 Default 패널을 연다
-            _CurUIBasePanel = ListUIPanel[prevIdx];
-            _CurUIBasePanel.LateInit();
+                case PrevType.OnlyHide:
+                    {
+                        hidePanel.Hide();
+                        ListUIPanel.RemoveAt(hideIdx);
+                        ListUIPanel.Add(hidePanel);
+                    }
+                    break;
 
-            // 현재 패널을 숨기고 리스트의 마지막으로 보낸다
-            UIBasePanel panel = ListUIPanel[curIdx];
-            if (panel != null)
-            {
-                panel.Hide();
-                ListUIPanel.Remove(panel);
-                ListUIPanel.Add(panel);
+                case PrevType.Hide:
+                    {
+                        if (showPanel != null)
+                        {
+                            _CurUIBasePanel = showPanel;
+                            showPanel.LateInit();
+                        }
+                        hidePanel.Hide();
+                    }
+                    break;
+
+                case PrevType.OnlyClose:
+                    {
+                        hidePanel.Close();
+                    }
+                    break;
+
+                case PrevType.Close:
+                    {
+                        if (showPanel != null)
+                        {
+                            _CurUIBasePanel = showPanel;
+                            showPanel.LateInit();
+                        }
+                        hidePanel.Close();
+                    }
+                    break;
             }
         }
     }
@@ -176,5 +214,12 @@ public class UIMgr : Singleton<UIMgr> {
     {
         if (PopupToast != null)
             PopupToast.GetComponent<PopupToastPanel>().ViewMessage(message);
+    }
+
+    // UI 카메라 On, Off
+    public void SetUICamera(bool on)
+    {
+        if (_UICamera != null)
+            _UICamera.enabled = on;
     }
 }

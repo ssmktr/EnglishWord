@@ -7,16 +7,11 @@ public class GameState : SceneBaseState
 {
     public override void OnEnter(Action callback = null)
     {
-        SceneName = "Game01";
+        SceneName = "GameScene";
         base.OnEnter(callback);
 
         LoadLevelAsync(SceneName);
     }
-
-    //private void OnLevelWasLoaded(int level)
-    //{
-
-    //}
 
     public override void OnExit(Action callback = null)
     {

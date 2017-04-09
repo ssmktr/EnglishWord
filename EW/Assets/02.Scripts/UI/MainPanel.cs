@@ -17,6 +17,8 @@ public class MainPanel : UIBasePanel {
     {
         base.LateInit();
 
+        GameMgr.Instance.OnEvent("SetTitle", "메인");
+
     }
 
     void OnClickReadyBtn(GameObject sender)

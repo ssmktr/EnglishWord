@@ -27,6 +27,7 @@ public class UIBasePanel : MonoBehaviour {
 
     public virtual void Hide()
     {
+        UIMgr.Instance.HideEvent(gameObject.name);
         gameObject.SetActive(false);
     }
 
@@ -34,5 +35,10 @@ public class UIBasePanel : MonoBehaviour {
     {
         UIMgr.Instance.CloseEvent(gameObject.name);
         Destroy(gameObject);
+    }
+
+    public virtual PrevType Prev()
+    {
+        return PrevType.Hide;
     }
 }

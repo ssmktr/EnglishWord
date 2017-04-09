@@ -7,6 +7,8 @@ public class GameMgr : Singleton<GameMgr> {
     public string NickName = "";
     public int EnterCost = 0;
 
+    public WordData SingGameWordData = null;
+
     #region EVENT
     Dictionary<string, System.Action<object>> DicEvent = new Dictionary<string, System.Action<object>>();
     public void AddEvent(string key, System.Action<object> action)
