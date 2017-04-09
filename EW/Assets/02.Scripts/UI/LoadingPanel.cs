@@ -5,6 +5,7 @@ using UnityEngine;
 public class LoadingPanel : UIBasePanel {
 
     public UILabel LoadingLbl;
+    public UIProgressBar ProgressBar;
 
     public override void Init()
     {
@@ -23,4 +24,8 @@ public class LoadingPanel : UIBasePanel {
         return PrevType.Not;
     }
 
+    public void SetProgressBar(float value)
+    {
+        ProgressBar.value = value;
+    }
 }

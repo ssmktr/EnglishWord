@@ -48,7 +48,7 @@ public class ReadyPanel : UIBasePanel {
             for (int i = 0; i < DataMgr.Instance.ListClearWordData.Count; ++i)
             {
                 // 이미 클리어 했는지 체크
-                if (DataMgr.Instance.ListClearWordData[i].Id == DataMgr.Instance.ListWordData[idx].Id)
+                if (DataMgr.Instance.ListClearWordData[i].id == DataMgr.Instance.ListWordData[idx].id)
                 {
                     bClear = true;
                     break;

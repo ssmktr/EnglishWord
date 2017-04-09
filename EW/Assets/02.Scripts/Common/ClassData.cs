@@ -4,18 +4,18 @@ using UnityEngine;
 
 public class WordData
 {
-    public int Id = 0;
-    public string English = "";
-    public string Korean = "";
+    public int id = 0;
+    public string english = "";
+    public string korean = "";
 
     public void Set(WordData data)
     {
         if (data == null)
             return;
 
-        Id = data.Id;
-        English = data.English;
-        Korean = data.Korean;
+        id = data.id;
+        english = data.english;
+        korean = data.korean;
     }
 }
 public class LocalData

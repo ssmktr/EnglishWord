@@ -25,6 +25,7 @@ public class InGameHUDPanel : UIBasePanel {
     {
         UIMgr.Instance.ShotDownUI();
 
+        UIMgr.Instance.OpenLoadingPanel(true);
         SceneManagerCustom.Instance.ActionEvent(_ACTION.GO_MAIN);
     }
 }

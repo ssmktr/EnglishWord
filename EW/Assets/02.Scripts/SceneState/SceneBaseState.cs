@@ -22,6 +22,10 @@ public class SceneBaseState : FSM.BaseState<SceneManagerCustom> {
 
     IEnumerator _LoadLevelAsync(string _sceneName, System.Action callback = null)
     {
+        // 로딩 프로그레스바 초기화
+        if (UIMgr.LoadingPanel != null)
+            UIMgr.LoadingPanel.SetProgressBar(0);
+
         yield return new WaitForSeconds(0.5f);
 
         // 같은 씬인지 체크
@@ -34,7 +38,9 @@ public class SceneBaseState : FSM.BaseState<SceneManagerCustom> {
 
             while (!async.isDone)
             {
-                GameHelper.DevDebugLog(async.progress);
+                // 로딩 프로그레스바 값
+                if (UIMgr.LoadingPanel != null)
+                    UIMgr.LoadingPanel.SetProgressBar(async.progress);
                 yield return null;
             }
 
