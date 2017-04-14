@@ -74,6 +74,9 @@ public class PopupPanel : UIBasePanel {
 
     void OnClickCancelBtn(GameObject sender)
     {
+        SoundMgr.Instance.Play("skill");
+        SoundMgr.Instance.BgPlay("Epic Theme");
+
         if (_CancelCallBack != null)
             _CancelCallBack();
 
