@@ -5,6 +5,7 @@ using UnityEngine;
 public class ReadyPanel : UIBasePanel {
 
     public GameObject StartBtn;
+    public GameObject[] InGameItemGroup;
 
     public override void Init()
     {
@@ -12,8 +13,13 @@ public class ReadyPanel : UIBasePanel {
 
         StartBtn.transform.FindChild("name").GetComponent<UILabel>().text = DataMgr.Instance.GetLocal(2001);
 
+        InGameItemInfo();
+
         // 게임 시작
         UIEventListener.Get(StartBtn).onClick = OnClickStartBtn;
+
+        for (int i = 0; i < InGameItemGroup.Length; ++i)
+            UIEventListener.Get(InGameItemGroup[i]).onClick = OnClickInGameItem;
     }
 
     public override void LateInit()
@@ -21,6 +27,9 @@ public class ReadyPanel : UIBasePanel {
         base.LateInit();
 
         GameMgr.Instance.OnEvent("SetTitle", DataMgr.Instance.GetLocal(2000));
+
+        GameMgr.Instance.DicInGameItem.Clear();
+        SelectItemCheck();
     }
 
     // 랜덤하게 문제 선택
@@ -77,9 +86,44 @@ public class ReadyPanel : UIBasePanel {
         UIMgr.Instance.SetUICamera(true);
     }
 
+    // 아이템 이름, 가격 표시
+    void InGameItemInfo()
+    {
+        InGameItemGroup[(int)InGameItemType.BonusTimer].transform.FindChild("CostNameLbl").GetComponent<UILabel>().text = DataMgr.Instance.GetLocal(2004);
+        InGameItemGroup[(int)InGameItemType.BonusChance].transform.FindChild("CostNameLbl").GetComponent<UILabel>().text = DataMgr.Instance.GetLocal(2005);
+        InGameItemGroup[(int)InGameItemType.HintAlphabet].transform.FindChild("CostNameLbl").GetComponent<UILabel>().text = DataMgr.Instance.GetLocal(2006);
+
+        InGameItemGroup[(int)InGameItemType.BonusTimer].transform.FindChild("CostValueLbl").GetComponent<UILabel>().text = "1000";
+        InGameItemGroup[(int)InGameItemType.BonusChance].transform.FindChild("CostValueLbl").GetComponent<UILabel>().text = "1500";
+        InGameItemGroup[(int)InGameItemType.HintAlphabet].transform.FindChild("CostValueLbl").GetComponent<UILabel>().text = "2000";
+    }
+
+    // 선택한 아이템 체크
+    void SelectItemCheck()
+    {
+        InGameItemGroup[(int)InGameItemType.BonusTimer].transform.FindChild("Check").gameObject.SetActive(GameMgr.Instance.DicInGameItem.ContainsKey(InGameItemType.BonusTimer));
+        InGameItemGroup[(int)InGameItemType.BonusChance].transform.FindChild("Check").gameObject.SetActive(GameMgr.Instance.DicInGameItem.ContainsKey(InGameItemType.BonusChance));
+        InGameItemGroup[(int)InGameItemType.HintAlphabet].transform.FindChild("Check").gameObject.SetActive(GameMgr.Instance.DicInGameItem.ContainsKey(InGameItemType.HintAlphabet));
+    }
+
+    #region ONCLICK
     void OnClickStartBtn(GameObject sender)
     {
         // 랜덤하게 문제 선택
         RandomWordData();
     }
+
+    void OnClickInGameItem(GameObject sender)
+    {
+        InGameItemType type = (InGameItemType)System.Enum.Parse(typeof(InGameItemType), sender.name);
+
+        if (GameMgr.Instance.DicInGameItem.ContainsKey(type))
+            GameMgr.Instance.DicInGameItem.Remove(type);
+        else
+            GameMgr.Instance.DicInGameItem.Add(type, 1);
+
+        SelectItemCheck();
+
+    }
+    #endregion
 }

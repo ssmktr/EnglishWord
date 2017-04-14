@@ -11,6 +11,8 @@ public class GameMgr : Singleton<GameMgr> {
 
     public WordData SingGameWordData = null;
 
+    public Dictionary<InGameItemType, int> DicInGameItem = new Dictionary<InGameItemType, int>();
+
     #region EVENT
     Dictionary<string, System.Action<object>> DicEvent = new Dictionary<string, System.Action<object>>();
     public void AddEvent(string key, System.Action<object> action)

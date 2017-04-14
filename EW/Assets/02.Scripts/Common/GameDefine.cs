@@ -33,3 +33,10 @@ public enum LocalType
     Ko,
     En,
 }
+
+public enum InGameItemType
+{
+    BonusTimer = 0,
+    BonusChance,
+    HintAlphabet,
+}
